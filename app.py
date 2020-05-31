@@ -4,26 +4,36 @@ import dash
 import dash_core_components as dcc
 import dash_html_components as html
 
-external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
-
-app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
+app = dash.Dash(__name__)
 
 server = app.server
 
 app.layout = html.Div([
-    html.H2('Hello World'),
-    dcc.Dropdown(
-        id='dropdown',
-        options=[{'label': i, 'value': i} for i in ['LA', 'NYC', 'MTL']],
-        value='LA'
-    ),
-    html.Div(id='display-value')
+                dcc.Tabs(id='navigation', value='forecast', children=[
+                    dcc.Tab(label='Expenses', value='expenses', children=[
+                        html.H6('enter new expenses'),
+                        html.H6('see all expenses'),
+                        html.H6('summary of expenses'),
+                        html.H6('chart of expenses')
+                    ]),
+                    dcc.Tab(label='Income', value='income', children=[
+                        html.H6('enter new income'),
+                        html.H6('see all income'),
+                        html.H6('summary of income'),
+                        html.H6('chart of income')
+                    ]),
+                    dcc.Tab(label='Summary', value='summary', children=[
+                        html.H6('combined')
+                    ]),
+                    dcc.Tab(label='Forecast', value='forecast', children=[
+                        html.H6('table of day by day money change?'),
+                        html.H6('graph with changeable/zoomable range'),
+                        html.H6('enter bottom threshold and highlight those values in red on graph/display in table'),
+                        html.H6('enter upper threshold and highlight those values in green on graph/display in table')
+                    ])
+                ])
 ])
 
-@app.callback(dash.dependencies.Output('display-value', 'children'),
-              [dash.dependencies.Input('dropdown', 'value')])
-def display_value(value):
-    return 'You have selected "{}"'.format(value)
 
 if __name__ == '__main__':
     app.run_server(debug=True)
